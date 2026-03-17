@@ -1,0 +1,26 @@
+services:
+  qwen3-tts:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    # image: qwen3tts:latest-cuda-12.8-ubuntu24.04
+    container_name: qwen3-tts
+    restart: always
+    ports:
+      - "7861:7860"
+    volumes:
+      - /ai/ai/hf-models/Qwen:/models
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
+    environment:
+      - NVIDIA_VISIBLE_DEVICES=all
+      - CUDA_DEVICE_ORDER=PCI_BUS_ID
